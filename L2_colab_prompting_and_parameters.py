@@ -8,7 +8,8 @@ import vertexai
 from PIL import Image as PIL_Image
 from PIL import ImageOps as PIL_ImageOps
 from utils import (gemini_vision, gemini_vision_parameters, print_multimodal_prompt)
-# from vertexai.generative_models import (GenerationConfig, GenerativeModel, Image, Part)
+from vertexai.generative_models import (GenerationConfig, GenerativeModel, Image, Part)
+
 
 ## ------------------------------------------------------ ##
 app = IPython.Application.instance()
@@ -38,11 +39,8 @@ def gemini(prompt, model):
     return response_text
 
 
-def display_images(
-                  images: typing.Iterable[Image],
-                  max_width: int = 600,
-                  max_height: int = 350,
-                  ) -> None:
+def display_images(images: typing.Iterable[Image], max_width: int = 600, max_height: int = 350,
+                   ) -> None:
     for image in images:
         pil_image = typing.cast(PIL_Image.Image, image._pil_image)
 
@@ -74,19 +72,20 @@ def gemini_vision(contents_image, model):
     responses = model.generate_content(contents_image, stream = True)
 
     response_text = ""
+
     for response in responses:
         response_text += response.text
+
     return response_text
 
 
 def gemini_vision_parameters(contents_image, model, config):
-    responses = model.generate_content(
-        contents=contents_image,
-        generation_config=config,
-        stream=True
-    )
+    responses = model.generate_content(contents = contents_image,
+                                        generation_config = config,
+                                        stream = True)
 
     response_text = ""
+
     for response in responses:
         response_text += response.text
 
@@ -99,10 +98,8 @@ model = GenerativeModel("gemini-2.0-flash")
 gemini("What is a multimodal model?", model = model)
 
 ## ------------------------------------------------------ ##
-prompt_1 = """
-          In short, what is deeplearning.ai,
-          and what can it offer me as a Machine Learning Engineer?"
-          """
+prompt_1 = """ In short, what is deeplearning.ai, and what can it offer me as a Machine Learning
+            Engineer? """
 
 ## ------------------------------------------------------ ##
 response_1 = model.generate_content(prompt_1, stream = True)
@@ -151,12 +148,10 @@ video_url = f"https://storage.googleapis.com/{file_path}"
 IPython.display.Video(video_url, width = 450)
 
 ## ------------------------------------------------------ ##
-prompt = """
-        Answer the following questions using the video only:
-        - What is the main person's profession?
-        - What are the main features of the phone highlighted?
-        - Which city was this recorded in?
-        """
+prompt = """ Answer the following questions using the video only:
+            - What is the main person's profession?
+            - What are the main features of the phone highlighted?
+            - Which city was this recorded in? """
 
 ## ------------------------------------------------------ ##
 video = Part.from_uri(video_uri, mime_type = "video/mp4")
@@ -173,8 +168,8 @@ for response in responses_4:
 image_1 = Image.load_from_file("./panda.png")
 
 ## ------------------------------------------------------ ##
-prompt_1 = """Write what is happening in the following image
-          from a unique perspective and do not mention names"""
+prompt_1 = """ Write what is happening in the following image from a unique perspective
+            and do not mention names. """
 
 ## ------------------------------------------------------ ##
 contents = [image_1, prompt_1]
@@ -194,19 +189,13 @@ for response in response_1:
 generation_config_1 = GenerationConfig(temperature = 0.0, top_k = 1, )
 
 ## ------------------------------------------------------ ##
-response_zero_temp = gemini_vision_parameters(
-                                              contents,
-                                              multimodal_model,
-                                              generation_config_1)
+response_zero_temp = gemini_vision_parameters(contents, multimodal_model, generation_config_1)
 
 ## ------------------------------------------------------ ##
 print(response_zero_temp)
 
 ## ------------------------------------------------------ ##
-responses_zero_temp = gemini_vision_parameters(
-                                              contents,
-                                              multimodal_model,
-                                              generation_config_1)
+responses_zero_temp = gemini_vision_parameters(contents, multimodal_model, generation_config_1)
 
 print(response_zero_temp)
 
@@ -217,17 +206,10 @@ generation_config_2 = GenerationConfig(temperature = 1, top_k = 40, )
 print(responses_high_temp_topk)
 
 ## ------------------------------------------------------ ##
-generation_config_4 = GenerationConfig(
-                                      temperature = 1,
-                                      top_k = 40,
-                                      top_p = 0.01,
-                                      )
+generation_config_4 = GenerationConfig(temperature = 1, top_k = 40, top_p = 0.01, )
 
 ## ------------------------------------------------------ ##
-responses_high_temp_topp = gemini_vision_parameters(
-                                                    contents,
-                                                    multimodal_model,
-                                                    generation_config_4)
+responses_high_temp_topp = gemini_vision_parameters(contents, multimodal_model, generation_config_4)
 
 print(responses_high_temp_topp)
 
@@ -235,10 +217,7 @@ print(responses_high_temp_topp)
 generation_config_5 = GenerationConfig(max_output_tokens = 10, )
 
 ## ------------------------------------------------------ ##
-responses_max_output = gemini_vision_parameters(
-                                                contents,
-                                                multimodal_model,
-                                                generation_config_5)
+responses_max_output = gemini_vision_parameters(contents, multimodal_model, generation_config_5)
 
 print(responses_max_output)
 
@@ -246,9 +225,6 @@ print(responses_max_output)
 generation_config_6 = GenerationConfig(stop_sequences = ["panda"])
 
 ## ------------------------------------------------------ ##
-responses_stop = gemini_vision_parameters(
-                                          contents,
-                                          multimodal_model,
-                                          generation_config_6)
+responses_stop = gemini_vision_parameters(contents, multimodal_model, generation_config_6)
 
 print(responses_stop)
