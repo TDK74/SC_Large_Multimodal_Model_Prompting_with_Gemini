@@ -4,6 +4,9 @@
 The Python code is from the short course "Large Multimodal Model Prompting with Gemini" on the DeepLearning.AI platform. The course content is available for free, while the certificate and graded assessments require a paid subscription.  
 For more details, visit:  
 <https://learn.deeplearning.ai/courses/large-multimodal-model-prompting-with-gemini>
+  
+The short course repository could be found here:  
+<https://github.com/https-deeplearning-ai/sc-gc-c4-gemini-public>
 
 ### Description
 This repository contains only Python code from my practice after each lesson.  
