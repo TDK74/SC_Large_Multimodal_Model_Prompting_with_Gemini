@@ -28,11 +28,8 @@ LOCATION = "europe-central2"
 vertexai.init(project = PROJECT_ID, location = LOCATION)
 
 ## ------------------------------------------------------ ##
-def display_images(
-                  images: typing.Iterable[Image],
-                  max_width: int = 600,
-                  max_height: int = 350,
-                  ) -> None:
+def display_images(images: typing.Iterable[Image], max_width: int = 600, max_height: int = 350,
+                    ) -> None:
     for image in images:
         pil_image = typing.cast(PIL_Image.Image, image._pil_image)
 
@@ -89,44 +86,23 @@ print("-------images--------")
 print_multimodal_prompt(images)
 
 ## ------------------------------------------------------ ##
-instruction_1 = """
-                I want to make a fruit salad with three bananas, two apples, \
-                one kiwi, and one orange. This is an image of my bowl \
-                of fruits:
-                """
+instruction_1 = """ I want to make a fruit salad with three bananas, two apples, one kiwi, and \
+                    one orange. This is an image of my bowl of fruits: """
 
 ## ------------------------------------------------------ ##
-instruction_2 = "This is the price list for fruits at \
-                my supermarket:"
+instruction_2 = "This is the price list for fruits at my supermarket:"
 
 ## ------------------------------------------------------ ##
-question = """
-          Please answer these questions:
-          - Describe which fruits and how many I have in my fruit bowl on \
-          the image?
-          - Given the fruits in my bowl on the image and the fruit salad \
-          recipe, what am I missing?
-          - Given the fruits I still need to buy, what \
-          would be the prices and total cost for these fruits?
-          """
+question = """ Please answer these questions:
+            - Describe which fruits and how many I have in my fruit bowl on the image?
+            - Given the fruits in my bowl on the image and the fruit salad recipe, what \
+                am I missing?
+            - Given the fruits I still need to buy, what would be the prices and total \
+                cost for these fruits?
+            """
 
 ## ------------------------------------------------------ ##
-contents = [
-            instruction_1,
-            fruit,
-            instruction_2,
-            prices,
-            question,
-          ]
-
-## ------------------------------------------------------ ##
-contents = [
-            instruction_1,
-            fruit,
-            instruction_2,
-            prices,
-            question,
-          ]
+contents = [instruction_1, fruit, instruction_2, prices, question, ]
 
 ## ------------------------------------------------------ ##
 print("-------Prompt--------")
@@ -140,19 +116,13 @@ response = gemini_vision(contents, multimodal_model)
 print(response, end = "")
 
 ## ------------------------------------------------------ ##
-furniture_images_uri = [
-                        "./chair-1.jpg",
-                        "./chair-2.jpg",
-                        "./chair-3.jpg",
-                        "./chair-4.jpg",
-                      ]
+furniture_images_uri = ["./chair-1.jpg", "./chair-2.jpg", "./chair-3.jpg", "./chair-4.jpg", ]
 
 ## ------------------------------------------------------ ##
 room_image = Image.load_from_file("./room.jpg")
 
 ## ------------------------------------------------------ ##
-furniture_images = [Image.load_from_file(uri)
-                    for uri in furniture_images_uri]
+furniture_images = [Image.load_from_file(uri) for uri in furniture_images_uri]
 
 ## ------------------------------------------------------ ##
 images_2 = [room_image]
@@ -165,8 +135,7 @@ print("-------images--------")
 print_multimodal_prompt(images_2)
 
 ## ------------------------------------------------------ ##
-recommendation_content = [
-                        "You are an interior designer.",
+recommendation_content = ["You are an interior designer.",
                         "Consider the following chairs:",
                         "chair 1:",
                         furniture_images[0],
@@ -178,10 +147,8 @@ recommendation_content = [
                         furniture_images[3],
                         "room:",
                         room_image,
-                        "For each chair, \
-                        explain whether it would be appropriate for the \
-                        style of the room:",
-                        ]
+                        "For each chair, explain whether it would be appropriate for the \
+                        style of the room:", ]
 
 ## ------------------------------------------------------ ##
 print("-------Prompt--------")
@@ -201,75 +168,59 @@ print(response, end = "")
 multimodal_model = GenerativeModel("gemini-2.0-flash")
 
 ## ------------------------------------------------------ ##
-receipt_images_uri = [
-                    './breakfast.jpg',
-                    './lunch.jpg',
-                    './diner.jpg',
-                    './meal-others.jpg',
-                    ]
+receipt_images_uri = ['./breakfast.jpg','./lunch.jpg','./diner.jpg','./meal-others.jpg', ]
 
 ## ------------------------------------------------------ ##
-receipt_images = [Image.load_from_file(uri)
-                  for uri in receipt_images_uri]
+receipt_images = [Image.load_from_file(uri) for uri in receipt_images_uri]
 
 ## ------------------------------------------------------ ##
 with open("travel-policy.txt", "r") as file:
     policy = file.read()
 
 ## ------------------------------------------------------ ##
-INSTRUCTION = "Never make up facts, and if you are not 100% sure, \
-              be transparent in stating when you are not sure, or do not \
-              have enough information to answer certain questions or \
-              fulfill certain requests."
+INSTRUCTION = "Never make up facts, and if you are not 100 % sure, be transparent in stating when \
+                you are not sure, or do not have enough information to answer certain questions \
+                or fulfill certain requests."
 
 ## ------------------------------------------------------ ##
 ROLE = "You are an HR professional and an expert in travel expenses."
 
 ## ------------------------------------------------------ ##
-ASSIGNMENT = """
-            You are reviewing travel expenses for a business trip.
-            Please complete the following tasks:
-            1. Itemize everything on the receipts, including tax and \
-            total.  This means identifying the cost of individual \
-            items that add up to the total cost before tax, as well \
-            as the tax ,such as sales tax, as well as tip.
-            2. What is the total sales tax paid?  In some cases, \
-            the total sales tax may be a sum of more than one line \
-            item of the receipt.
-            3. For this particular receipt, the employee who is \
-            adding this business expense purchased the meal with \
-            a group. The employee only ordered the KFC Bowl. Please \
-            provide the cost of the employee's order only.  Include \
-            both the cost before tax, and also estimate the tax \
-            that is applied to this employee's order.  To do this,\
-            calculate the fraction of the employee's pre-tax order\
-            divided by the total pre-tax cost.  This fraction can be \
-            applied to the total sales tax that you calculated earlier.
-            4.  Please calculate the amount spent by others, which \
-            are all the other line items on the receipt.  Please \
-            provide this sum before tax, and if possible, apply the \
-            tax for the total cost.
-            5. Check the expenses against company policy and flag \
-            if there are issues.
-            """
+ASSIGNMENT = """ You are reviewing travel expenses for a business trip.
+                Please complete the following tasks:
+                1. Itemize everything on the receipts, including tax and total. This means \
+                    identifying the cost of individual items that add up to the total cost before \
+                    tax, as well as the tax ,such as sales tax, as well as tip.
+                2. What is the total sales tax paid?  In some cases, the total sales tax may be \
+                    a sum of more than one line item of the receipt.
+                3. For this particular receipt, the employee who is adding this business expense \
+                    purchased the meal with a group. The employee only ordered the KFC Bowl. \
+                    Please provide the cost of the employee's order only. Include both the cost \
+                    before tax, and also estimate the tax that is applied to this employee's \
+                    order.  To do this, calculate the fraction of the employee's pre-tax order \
+                    divided by the total pre-tax cost. This fraction can be applied to the total \
+                    sales tax that you calculated earlier.
+                4.  Please calculate the amount spent by others, which are all the other line \
+                    items on the receipt. Please provide this sum before tax, and if possible, \
+                    apply the tax for the total cost.
+                5. Check the expenses against company policy and flag if there are issues.
+                """
 
 
 ## ------------------------------------------------------ ##
-receipt_content = [
-                  INSTRUCTION,
-                  ROLE,
-                  "Answer the questions based on the following receipts:"
-                  "breakfast:",
-                  receipt_images[0],
-                  "lunch:",
-                  receipt_images[1],
-                  "diner",
-                  receipt_images[2],
-                  "meal-others",
-                  receipt_images[3],
-                  ASSIGNMENT,
-                  policy,
-                  ]
+receipt_content = [INSTRUCTION,
+                    ROLE,
+                    "Answer the questions based on the following receipts:"
+                    "breakfast:",
+                    receipt_images[0],
+                    "lunch:",
+                    receipt_images[1],
+                    "diner",
+                    receipt_images[2],
+                    "meal-others",
+                    receipt_images[3],
+                    ASSIGNMENT,
+                    policy, ]
 
 ## ------------------------------------------------------ ##
 print_multimodal_prompt(receipt_content)
